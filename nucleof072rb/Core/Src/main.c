@@ -19,9 +19,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -64,6 +65,7 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -74,6 +76,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+
 
   /* USER CODE END Init */
 
@@ -87,7 +90,18 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
+  MX_SPI1_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+  uint8_t TxBuffer[1] = {0xC0};
+  uint8_t RxBuffer[2] = {0};
+  Size = 1;
+  Timeout = 100;
+  uint16_t MAX_ADC_VALUE = 1023;
+  uint16_t MAX_COUNTER = 65535;
+  uint16_t MIN_TIMER_COUNT = 3276.75; // 5% of max counter
+  uint16_t MAX_TIMER_COUNT = 6553.50; // 10% of max counter
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 
   /* USER CODE END 2 */
 
@@ -96,10 +110,21 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  // Set CS line to low
+	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
+	  HAL_SPI_TransmitReceive(&hspi1, TxBuffer, RxBuffer, Size, Timeout);
+	  // Set CS line to high
+	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);
+	  uint16_t sigBits = (RxBuffer[0] & 0x1F <<8 | RxBuffer[1]);
+	  uint16_t pmw_count = (sigBits/MAX_ADC_VALUE)*(MAX_TIMER_COUNT-MIN_TIMER_COUNT)+MIN_TIMER_COUNT;
+	  __HAL_TIM_SET_COMPARE(&tim1, TIM_CHANNEL_1, pwm_count);
+	  HAL_Delay(10);
 
     /* USER CODE BEGIN 3 */
   }
+
   /* USER CODE END 3 */
+  HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
 }
 
 /**
@@ -122,6 +147,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -177,5 +203,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
