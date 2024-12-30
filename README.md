@@ -1,4 +1,4 @@
-# Embedded-Bootcamp
+# Motor Tester - STM32IDE
 
 ## Introduction[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#introduction)
 
