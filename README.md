@@ -2,7 +2,7 @@
 
 ## Introduction[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#introduction)
 
-The goal of this STM23IDE project is to implement a motor tester. Motor testers are useful for determining servo motor range, continuous rotation motor speed, prototype testing, and centering servos. Here, a potentiometer value is inputted from 0 to 3.3V and convert it to a PWM signal to control a motor. The potentiometer is connected to an external ADC chip which sends data to the MCU over SPI. <a href="https://uwarg-docs.atlassian.net/wiki/spaces/BOOT/pages/1997373445/2021+Firmware+Bootcamp">Read more</a></p>
+The goal of this STM23IDE project is to implement a motor tester. Motor testers are useful for determining servo motor range, continuous rotation motor speed, prototype testing, and centering servos. Here, a potentiometer value is inputted from 0 to 3.3V and convert it to a PWM signal to control a motor. The potentiometer is connected to an external ADC chip which sends data to the MCU over SPI. <a href="https://uwarg-docs.atlassian.net/wiki/spaces/BOOT/pages/1998061593/Challenge">Read more</a></p>
 
 ---
 
