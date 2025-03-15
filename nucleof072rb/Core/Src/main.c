@@ -23,6 +23,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -93,14 +94,14 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t TxBuffer[1] = {0xC0};
-  uint8_t RxBuffer[2] = {0};
+  uint8_t TxBuffer[3];
+  uint8_t RxBuffer[3];
   Size = 1;
   Timeout = 100;
   uint16_t MAX_ADC_VALUE = 1023;
-  uint16_t MAX_COUNTER = 65535;
-  uint16_t MIN_TIMER_COUNT = 3276.75; // 5% of max counter
-  uint16_t MAX_TIMER_COUNT = 6553.50; // 10% of max counter
+  uint16_t MAX_COUNTER = 64000;
+  uint16_t MIN_TIMER_COUNT = 3200; // 5% of max counter
+  uint16_t MAX_TIMER_COUNT = 6400; // 10% of max counter
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 
   /* USER CODE END 2 */
@@ -110,21 +111,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  // Set CS line to low
-	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
-	  HAL_SPI_TransmitReceive(&hspi1, TxBuffer, RxBuffer, Size, Timeout);
-	  // Set CS line to high
-	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);
-	  uint16_t sigBits = (RxBuffer[0] & 0x1F <<8 | RxBuffer[1]);
-	  uint16_t pmw_count = (sigBits/MAX_ADC_VALUE)*(MAX_TIMER_COUNT-MIN_TIMER_COUNT)+MIN_TIMER_COUNT;
-	  __HAL_TIM_SET_COMPARE(&tim1, TIM_CHANNEL_1, pwm_count);
-	  HAL_Delay(10);
 
     /* USER CODE BEGIN 3 */
   }
 
   /* USER CODE END 3 */
-  HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
 }
 
 /**
