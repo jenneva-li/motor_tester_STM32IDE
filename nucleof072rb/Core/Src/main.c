@@ -94,7 +94,7 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t TxBuffer[3]={0x1, 0x8, 0x0};
+  uint8_t TxBuffer[3]={0x1, 0x80, 0x0};
   uint8_t RxBuffer[3]={0x00, 0x00, 0x00};
   uint8_t Size = 3;
   uint8_t Timeout = 100;
