@@ -111,14 +111,14 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
-	  HAL_SPI_TransmitReceive(&hspi1, TxBuffer, RxBuffer, Size, Timeout);
+    	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
+	HAL_SPI_TransmitReceive(&hspi1, TxBuffer, RxBuffer, Size, Timeout);
 	  // Set CS line to high
-	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);
-	  uint16_t sigBits = ((RxBuffer[0] & 0x03) <<8 | RxBuffer[1]);
-	  uint16_t pmw_count = (sigBits/MAX_ADC_VALUE)*(MAX_TIMER_COUNT-MIN_TIMER_COUNT)+MIN_TIMER_COUNT;
-	  __HAL_TIM_SET_COMPARE(&tim1, TIM_CHANNEL_1, pwm_count);
-	  HAL_Delay(10);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);
+	uint16_t sigBits = ((RxBuffer[0] & 0x03) <<8 | RxBuffer[1]);
+	uint16_t pmw_count = (sigBits/MAX_ADC_VALUE)*(MAX_TIMER_COUNT-MIN_TIMER_COUNT)+MIN_TIMER_COUNT;
+	__HAL_TIM_SET_COMPARE(&tim1, TIM_CHANNEL_1, pwm_count);
+	HAL_Delay(10);
     /* USER CODE BEGIN 3 */
   }
   HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
